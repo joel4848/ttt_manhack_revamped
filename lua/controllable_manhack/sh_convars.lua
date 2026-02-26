@@ -14,6 +14,15 @@ function ControllableManhack.CreateConvar(...)
 end
 
 ControllableManhack.CreateConvar{
+    convarName = "allowinteract",
+    functionName = "AllowInteract",
+    type = "Bool",
+    value = 1,
+    flags = FCVAR_ARCHIVE + FCVAR_REPLICATED,
+    helpText = "Enable interacting with things with the manhack"
+}
+
+ControllableManhack.CreateConvar{
     convarName = "ammoinfinite",
     functionName = "AmmoInfinite",
     type = "Bool",

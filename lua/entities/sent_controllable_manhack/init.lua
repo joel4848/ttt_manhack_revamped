@@ -94,7 +94,7 @@ end
 function ENT:UseOtherEntity(ent)
     local playerController = self:GetPlayerController()
     
-    if ent.Use and IsValid(playerController) then
+    if ent.Use then
         ent:Use(playerController, self, USE_ON, 0)
     else
         ent:Fire("use", "1", 0)
@@ -573,11 +573,59 @@ function ENT:StartControlling()
             end
         end)
         
-        self:HookAdd("PlayerUse", "DisallowUse", function(ply, ent)
-            if ply == playerController then
-                return false
-            end
-        end)
+        if not ControllableManhack.ConVarAllowInteract() then
+            -- print("[DEBUG] AllowInteract = false")
+
+            self:HookAdd("PlayerUse", "DisallowUse", function(ply, ent)
+                -- print("[DEBUG] PlayerUse fired")
+                -- print("- Player:", ply)
+                -- print("- Target entity:", ent)
+            
+                if ply == playerController then
+                    -- print(" - Blocking use from controlling player")
+                    return false
+                end
+            end)
+        
+        else
+            -- print("[DEBUG] AllowInteract = true")
+        
+            self:HookAdd("PlayerUse", "DisallowUse", function(ply, ent)
+                -- print("[DEBUG] PlayerUse fired")
+                -- print("- Player:", ply)
+                -- print("- Target entity from hook:", ent)
+            
+                if ply == playerController then
+                    -- print("- Controlling player pressed use")
+                
+                    local startPos = self:GetPos()
+                    local endPos = startPos + self:GetAngles():Forward() * 64
+                
+                    -- print("- Trace start:", startPos)
+                    -- print("- Trace end:", endPos)
+                
+                    local trace = util.TraceLine({
+                        start = startPos,
+                        endpos = endPos,
+                        filter = {self, playerController}
+                    })
+                
+                    -- print("- Trace hit:", trace.Hit)
+                    -- print("- Trace entity:", trace.Entity)
+                    -- print("- Trace entity class:", IsValid(trace.Entity) and trace.Entity:GetClass() or "nil")
+                
+                    if IsValid(trace.Entity) then
+                        -- print(" - Running UseOtherEntity on:", trace.Entity)
+                        self:UseOtherEntity(trace.Entity)
+                    else
+                        -- print(" - No valid entity hit")
+                    end
+                
+                    -- print(" - Returning false to block normal use")
+                    return false
+                end
+            end)
+        end
         
         self:EmitSound(self.SoundActive)
         self:SetControlActive(true)
