@@ -185,6 +185,7 @@ ENT.HUDWhitelist = {
 	CHudChat = true;
 	NetGraph = true;
 	CHudMenu = true;
+	TTTTButton = true;
 }
 
 ENT.GlowSprite1Offset = Vector(0, 1.2, 5)

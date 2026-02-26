@@ -215,6 +215,17 @@ function ENT:StartControlling()
                 draw.SimpleTextOutlined(hudText:GetValue(self), self.HUDTextFont, self.HUDTextOffset.x + self.HUDTextSeperatorXSpacing * 2 + seperatorTextSizeX, y, self.HUDTextColor, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, self.HudTextOutlineSize, self.HUDTextOutlineColor)
             end
         end
+    
+        -- Draw traitor buttons from manhack position if controlling player is a traitor
+        local playerController = self:GetPlayerController()
+        if IsValid(playerController) and playerController == LocalPlayer() and playerController:IsActiveTraitor() and TBHUD then
+            local manhack = self
+            local realGetPos = playerController.GetPos
+            playerController.GetPos = function() return manhack:GetPos() end
+            TBHUD:CacheEnts()
+            TBHUD:Draw(playerController)
+            playerController.GetPos = realGetPos
+        end
     end)
     
     self:HookAdd("Move", "PreventOwnerMovement", function(ply, moveData)

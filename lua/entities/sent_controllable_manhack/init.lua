@@ -548,15 +548,44 @@ function ENT:StartControlling()
                     self:EmitSound(self.SoundActive)
                     self:StopControlling()
                 elseif key == IN_USE and ControllableManhack.ConVarAllowInteract() then
+                    local manhackPos = self:GetPos()
+
+                    -- Check for traitor buttons in range if player is a traitor
+                    if playerController:IsActiveTraitor() then
+                        local closestButton = nil
+                        local closestDist = math.huge
+
+                        for _, btn in pairs(ents.FindByClass("ttt_traitor_button")) do
+                            if IsValid(btn) and btn.IsUsable and btn:IsUsable() then
+                                local dist = manhackPos:Distance(btn:GetPos())
+                                if dist <= btn:GetUsableRange() and dist < closestDist then
+                                    closestDist = dist
+                                    closestButton = btn
+                                end
+                            end
+                        end
+
+                        if IsValid(closestButton) then
+                            -- Temporarily override GetPos so TraitorUse passes its distance check
+                            local realGetPos = playerController.GetPos
+                            playerController.GetPos = function() return manhackPos end
+                            closestButton:TraitorUse(playerController)
+                            playerController.GetPos = realGetPos
+                            return
+                        end
+                    end
+
+                    -- Fall back to normal trace-based use for everything else
                     local trace = util.TraceLine({
-                        start = self:GetPos(),
-                        endpos = self:GetPos() + self:GetAngles():Forward() * 72,
+                        start = manhackPos,
+                        endpos = manhackPos + self:GetAngles():Forward() * 64,
                         filter = self
                     })
-
+                
                     if IsValid(trace.Entity) then
                         self:UseOtherEntity(trace.Entity)
                     end
+
                 end
             end
         end)
