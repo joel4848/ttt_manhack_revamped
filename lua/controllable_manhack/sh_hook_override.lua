@@ -63,7 +63,7 @@ hook.Add("PostGamemodeLoaded", "ControllableManhack.HookOverride", function()
             ControllableManhack.RealHookRemove(eventName, identifier)
         end
     else
-        --These just use hook.Add and hook.Remove since command controllable_manhack_fixconflicts is off
+        --These just use hook.Add and hook.Remove since command controllable_manhack__revamped_fixconflicts is off
         
         function ControllableManhack.AddOverrideHook(eventName, identifier, Func)
             ControllableManhack.RealHookAdd(eventName, identifier, Func)

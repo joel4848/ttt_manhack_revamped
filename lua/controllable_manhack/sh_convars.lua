@@ -1,5 +1,5 @@
 
-ControllableManhack.conVarPrefix = "controllable_manhack_"
+ControllableManhack.conVarPrefix = "controllable_manhack_revamped_"
 
 function ControllableManhack.CreateConvar(...)
     local convarTable = ...
