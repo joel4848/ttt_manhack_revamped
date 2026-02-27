@@ -23,6 +23,15 @@ ControllableManhack.CreateConvar{
 }
 
 ControllableManhack.CreateConvar{
+    convarName = "allowtraitorbuttons",
+    functionName = "AllowTraitorButtons",
+    type = "Bool",
+    value = 1,
+    flags = FCVAR_ARCHIVE + FCVAR_REPLICATED,
+    helpText = "Enable traitors to see and trigger traitor buttons while controlling a manhack"
+}
+
+ControllableManhack.CreateConvar{
     convarName = "ammoinfinite",
     functionName = "AmmoInfinite",
     type = "Bool",

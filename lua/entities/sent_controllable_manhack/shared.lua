@@ -180,13 +180,28 @@ ENT.HUDTargetCircleColor = Color(255, 0, 0)
 ENT.HUDTargetCircleMaterial = Material("particle/Particle_Ring_Wave_Additive")
 ENT.HUDTargetTextHP = "HP "
 ENT.HUDTargetYSpacing = 12
-ENT.HUDWhitelist = {
-	CHudGMod = true;
-	CHudChat = true;
-	NetGraph = true;
-	CHudMenu = true;
-	TTTTButton = true;
-}
+
+if ControllableManhack.ConVarAllowTraitorButtons() then
+
+	ENT.HUDWhitelist = {
+		CHudGMod = true;
+		CHudChat = true;
+		NetGraph = true;
+		CHudMenu = true;
+		TTTTButton = true;
+	}
+
+else
+	
+	ENT.HUDWhitelist = {
+		CHudGMod = true;
+		CHudChat = true;
+		NetGraph = true;
+		CHudMenu = true;
+		-- TTTTButton = true;
+	}
+
+end
 
 ENT.GlowSprite1Offset = Vector(0, 1.2, 5)
 ENT.GlowSprite2Offset = Vector(0, 0, 3)

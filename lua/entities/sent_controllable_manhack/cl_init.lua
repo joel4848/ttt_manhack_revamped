@@ -218,7 +218,7 @@ function ENT:StartControlling()
     
         -- Draw traitor buttons from manhack position if controlling player is a traitor
         local playerController = self:GetPlayerController()
-        if IsValid(playerController) and playerController == LocalPlayer() and playerController:IsActiveTraitor() and TBHUD then
+        if IsValid(playerController) and playerController == LocalPlayer() and playerController:IsActiveTraitor() and TBHUD and ControllableManhack.ConVarAllowTraitorButtons() then
             local manhack = self
             local realGetPos = playerController.GetPos
             playerController.GetPos = function() return manhack:GetPos() end
